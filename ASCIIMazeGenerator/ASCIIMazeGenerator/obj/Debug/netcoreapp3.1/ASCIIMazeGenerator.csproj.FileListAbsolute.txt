@@ -1,0 +1,11 @@
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\bin\Debug\netcoreapp3.1\ASCIIMazeGenerator.exe
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\bin\Debug\netcoreapp3.1\ASCIIMazeGenerator.deps.json
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\bin\Debug\netcoreapp3.1\ASCIIMazeGenerator.runtimeconfig.json
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\bin\Debug\netcoreapp3.1\ASCIIMazeGenerator.runtimeconfig.dev.json
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\bin\Debug\netcoreapp3.1\ASCIIMazeGenerator.dll
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\bin\Debug\netcoreapp3.1\ASCIIMazeGenerator.pdb
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\obj\Debug\netcoreapp3.1\ASCIIMazeGenerator.csprojAssemblyReference.cache
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\obj\Debug\netcoreapp3.1\ASCIIMazeGenerator.AssemblyInfoInputs.cache
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\obj\Debug\netcoreapp3.1\ASCIIMazeGenerator.AssemblyInfo.cs
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\obj\Debug\netcoreapp3.1\ASCIIMazeGenerator.dll
+C:\Users\Tom\source\repos\ASCIIMazeGenerator\ASCIIMazeGenerator\obj\Debug\netcoreapp3.1\ASCIIMazeGenerator.pdb

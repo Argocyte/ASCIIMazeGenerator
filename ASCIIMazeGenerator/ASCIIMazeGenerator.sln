@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCIIMazeGenerator", "ASCIIMazeGenerator\ASCIIMazeGenerator.csproj", "{AB73AE2B-20C3-4DD3-8A8A-436AEDEBC2CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB73AE2B-20C3-4DD3-8A8A-436AEDEBC2CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB73AE2B-20C3-4DD3-8A8A-436AEDEBC2CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB73AE2B-20C3-4DD3-8A8A-436AEDEBC2CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB73AE2B-20C3-4DD3-8A8A-436AEDEBC2CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E3964681-614F-492A-A173-093A93DDCFEA}
+	EndGlobalSection
+EndGlobal
