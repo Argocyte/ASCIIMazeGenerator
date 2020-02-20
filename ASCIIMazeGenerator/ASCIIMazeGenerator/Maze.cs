@@ -12,9 +12,9 @@ namespace ASCIIMazeGenerator
         /// <summary>
         /// 2D Jagged array (for performance) of the cells in the maze.
         /// </summary>
-        public readonly Cell[][] Cells;
-        public readonly int Width;
-        public readonly int Height;
+        public Cell[][] Cells;
+        public int Width;
+        public int Height;
 
         /// <summary>
         /// Initialises A Maze of x by y size.
@@ -111,7 +111,7 @@ namespace ASCIIMazeGenerator
                 {
                     stringBuilder.Append(Cells[x][y].Output());
                 }
-                stringBuilder.Append(Environment.NewLine);
+                if (y != Height - 1) stringBuilder.Append(Environment.NewLine);
             }
             return stringBuilder.ToString();
         }

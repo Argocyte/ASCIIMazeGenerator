@@ -37,6 +37,7 @@
         public const string OPTION_OPEN_FROM_FILE = "Open a maze from a file";
         public const string OPTION_TRY_AGAIN = "Try again";
         public const string OPTION_RETURN = "Return to main menu";
+        public const string OPTION_OUTPUT_TO_TXT = "Output this maze to a text file";
         public const string OPTION_EXIT_PROGRAM = "Exit the program";
         public const string INPUT_MAZE_WIDTH = "Enter the width";
         public const string INPUT_MAZE_HEIGHT = "Enter the height";
@@ -44,10 +45,11 @@
         public const string GENERATED = "Generated a maze of size {0}, {1}...";
         public const string SAVE_INPUT_FILE_NAME = "Input the name you wish to call this maze";
         public const string SAVE_SUCCESS = "Save was succesful. File {0} created";
-        public const string OPEN_INPUT_FILE_NAME = "Input the name of the file you wish to open";
-        public const string OPEN_SUCCESS = "Opening of {0} was successful";
+        public const string SAVE_FILE_EXISTS = "A file by the name of {0} already exists";
         public const string CONFIRM = "Are you sure?";
+        public const string CONFIRM_OVERWRITE = "Do you want to over-write this file? Original will be lost";
         public const string IO_ERROR = "The file name you entered was not valid";
+        public const string OPEN_ERROR_NO_MAZES = "There are no mazes saved";
     }
 
     /// <summary>
@@ -57,7 +59,10 @@
     {
         public const int MAZE_WIDTH = 25;
         public const int MAZE_HEIGHT = 25;
-        public const string FILE_EXTENSION = ".maze";
-        public const string FILE_FOLDER = "MazeFiles\\";
+        public const string FILE_EXTENSION_MZE = ".mze";
+        public const string FILE_EXTENSION_TXT = ".txt";
+        public const string FILE_FOLDER_MZE = "MazeFiles\\";
+        public const string FILE_FOLDER_TXT = "MazeOutpt\\";
+        public const char WILDCARD = '*';
     }
 }
