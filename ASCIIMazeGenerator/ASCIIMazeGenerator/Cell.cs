@@ -2,28 +2,46 @@
 {
     public class Cell
     {
-        public Cardinal cardinal { get; set; }
+        /// <summary>
+        /// an enum that stores the connections the cell has.
+        /// </summary>
+        public Cardinal Cardinals { get; set; }
 
+        /// <summary>
+        /// initialises the cell
+        /// </summary>
         public Cell()
         {
-            cardinal = Cardinal.NONE;
+            Cardinals = Cardinal.NONE;
         }
 
+        /// <summary>
+        /// check if the cell has been visited
+        /// </summary>
+        /// <returns>true if visited</returns>
         public bool Visited()
         {
-            if (cardinal == Cardinal.NONE) return false;
+            if (Cardinals == Cardinal.NONE) return false;
 
             else return true;
         }
 
-        public void VisitCell(Cardinal _cardinal)
+        /// <summary>
+        /// visits the cell, setting the cardinal that is passed through
+        /// </summary>
+        /// <param name="_cardinal">direction the cell is being visited from</param>
+        public void Visit(Cardinal _cardinal)
         {
-            cardinal |= _cardinal;
+            Cardinals |= _cardinal;
         }
 
-        public char OutputCell()
+        /// <summary>
+        /// outputs the cell, given the cardinals that are active
+        /// </summary>
+        /// <returns>the ASCII symbol which denotes the cell</returns>
+        public char Output()
         {
-            return cardinal switch
+            return Cardinals switch
             {
                 Cardinal.NORTH | Cardinal.SOUTH | Cardinal.EAST | Cardinal.WEST => Passage.NORTHSOUTHEASTWEST,
                 Cardinal.NORTH | Cardinal.SOUTH | Cardinal.EAST => Passage.NORTHSOUTHEAST,
