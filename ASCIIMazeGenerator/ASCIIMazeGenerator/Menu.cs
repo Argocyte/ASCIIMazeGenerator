@@ -7,11 +7,17 @@ using System.IO;
 
 namespace ASCIIMazeGenerator
 {
+    /// <summary>
+    /// Dsiplays the menu and handles the menu logic
+    /// </summary>
     class Menu
     {
+        /// <summary>
+        /// initialises the menu
+        /// </summary>
         public Menu()
         {
-            Console.Clear();
+            Console.WriteLine();
             switch (Prompt.Select(MenuText.SELECT_OPTION, new[] 
             {
                 MenuText.OPTION_GENERATE_DEFAULT,
@@ -35,11 +41,21 @@ namespace ASCIIMazeGenerator
                     break;
             }
         }
+
+        /// <summary>
+        /// Generates the maze, then sends it to Loaded()
+        /// </summary>
+        /// <param name="width">width of the maze</param>
+        /// <param name="height">height of the maze</param>
         private void Generate(int width, int height)
         {
             Console.WriteLine(MenuText.GENERATING, width, height);
             Loaded(new Maze(width, height));
         }
+
+        /// <summary>
+        /// opens a maze json file, then sends that maze to Loaded()
+        /// </summary>
         private void Open()
         {
             while (true)
@@ -53,6 +69,7 @@ namespace ASCIIMazeGenerator
                     }
                     using StreamReader file = File.OpenText(inputFileName);
                     JsonSerializer serializer = new JsonSerializer();
+                    Console.WriteLine(MenuText.OPEN_SUCCESS, inputFileName);
                     Loaded((Maze)serializer.Deserialize(file, typeof(Maze)));
                 }
                 catch (IOException)
@@ -73,6 +90,11 @@ namespace ASCIIMazeGenerator
                 } 
             }
         }
+
+        /// <summary>
+        /// Displays the maze, then asks what the user wants to do next
+        /// </summary>
+        /// <param name="maze">A ready made maze</param>
         private void Loaded(Maze maze)
         {
             Console.WriteLine(Environment.NewLine + maze.Display());
@@ -94,6 +116,11 @@ namespace ASCIIMazeGenerator
                     break;
             }
         }
+
+        /// <summary>
+        /// Saves the maze to a json file
+        /// </summary>
+        /// <param name="maze">A ready made maze</param>
         private void SaveToFile(Maze maze)
         {
             var inputFileName = Prompt.Input<string>(MenuText.SAVE_INPUT_FILE_NAME);
@@ -104,6 +131,8 @@ namespace ASCIIMazeGenerator
             using StreamWriter file = File.CreateText(inputFileName);
             JsonSerializer serializer = new JsonSerializer();
             serializer.Serialize(file, maze);
+            Console.WriteLine(MenuText.SAVE_SUCCESS, inputFileName);
+            new Menu();
         }
     }
 }

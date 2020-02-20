@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ASCIIMazeGenerator
 {
@@ -9,9 +10,9 @@ namespace ASCIIMazeGenerator
     public class Maze
     {
         /// <summary>
-        /// 2D array of the cells in the maze. Each cell has directions the four cardinal directions it can be connected to.
+        /// 2D Jagged array (for performance) of the cells in the maze.
         /// </summary>
-        public readonly Cell[,] Cells;
+        public readonly Cell[][] Cells;
         public readonly int Width;
         public readonly int Height;
 
@@ -24,12 +25,13 @@ namespace ASCIIMazeGenerator
         {
             Width = width;
             Height = height;
-            Cells = new Cell[Width, Height];
-            for (int x = 0; x < width; x++)
+            Cells = new Cell[Width][];
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                Cells[x] = new Cell[Height];
+                for (int y = 0; y < Height; y++)
                 {
-                    Cells[x, y] = new Cell();
+                    Cells[x][y] = new Cell();
                 }
             }
             Random rand = new Random();
@@ -46,7 +48,7 @@ namespace ASCIIMazeGenerator
         /// <param name="rand">Passes a random number generator through, to allow the use of a seed throughout the code without a global variable.</param>
         void Generate(int x, int y, Cardinal cardinal, Random rand)
         {
-            Cells[x, y].VisitCell(cardinal);
+            Cells[x][y].Visit(cardinal);
             cardinal = GetCardinal(rand, x, y);
             while (cardinal != Cardinal.NONE)//will visit each direction not currently visited around the current cell.
             {
@@ -54,23 +56,18 @@ namespace ASCIIMazeGenerator
                 {
                     case Cardinal.NORTH:
                         Generate(x, y - 1, Cardinal.SOUTH, rand);
-                        Cells[x, y].VisitCell(cardinal);
                         break;
                     case Cardinal.EAST:
                         Generate(x + 1, y, Cardinal.WEST, rand);
-                        Cells[x, y].VisitCell(cardinal);
                         break;
                     case Cardinal.SOUTH:
                         Generate(x, y + 1, Cardinal.NORTH, rand);
-                        Cells[x, y].VisitCell(cardinal);
                         break;
                     case Cardinal.WEST:
                         Generate(x - 1, y, Cardinal.EAST, rand);
-                        Cells[x, y].VisitCell(cardinal);
-                        break;
-                    default:
                         break;
                 }
+                Cells[x][y].Visit(cardinal);
                 cardinal = GetCardinal(rand, x, y);
             }
         }
@@ -85,14 +82,14 @@ namespace ASCIIMazeGenerator
         {
             List<Cardinal> cardinals = new List<Cardinal>();
 
-            if (x > 0 && !Cells[x - 1, y].Visited())
+            if (x > 0 && !Cells[x - 1][y].Visited())
                 cardinals.Add(Cardinal.WEST);
-            if (y > 0 && !Cells[x, y - 1].Visited())
+            if (y > 0 && !Cells[x][y - 1].Visited())
                 cardinals.Add(Cardinal.NORTH);
 
-            if (y < Height - 1 && !Cells[x, y + 1].Visited())
+            if (y < Height - 1 && !Cells[x][y + 1].Visited())
                 cardinals.Add(Cardinal.SOUTH);
-            if (x < Width - 1 && !Cells[x + 1, y].Visited())
+            if (x < Width - 1 && !Cells[x + 1][y].Visited())
                 cardinals.Add(Cardinal.EAST);
 
             if (cardinals.Count == 0)
@@ -107,16 +104,16 @@ namespace ASCIIMazeGenerator
         /// <returns>Returns a string of ASCII text which resembels the maze defined in the array of Cells. The output is formatted for new lines.</returns>
         public string Display()
         {
-            string output = "";
-            for (int y = 0; y < Height; y++)//loops through each cell from top left to bottom right, adding it's output to the string.
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int y = 0; y < Height; y++)
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    output += Cells[x, y].OutputCell();
+                    stringBuilder.Append(Cells[x][y].Output());
                 }
-                output += Environment.NewLine;
+                stringBuilder.Append(Environment.NewLine);
             }
-            return output;
+            return stringBuilder.ToString();
         }
     }
 }
