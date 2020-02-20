@@ -58,37 +58,37 @@ namespace ASCIIMazeGenerator
         /// </summary>
         private void Open()
         {
-            while (true)
+            try
             {
-                try
+                var inputFileName = Prompt.Input<string>(MenuText.OPEN_INPUT_FILE_NAME);
+                if (!inputFileName.Contains(Default.FILE_EXTENSION))
                 {
-                    var inputFileName = Prompt.Input<string>(MenuText.OPEN_INPUT_FILE_NAME);
-                    if (!inputFileName.Contains(Default.FILE_EXTENSION))
-                    {
-                        inputFileName += Default.FILE_EXTENSION;
-                    }
-                    using StreamReader file = File.OpenText(inputFileName);
-                    JsonSerializer serializer = new JsonSerializer();
-                    Console.WriteLine(MenuText.OPEN_SUCCESS, inputFileName);
-                    Loaded((Maze)serializer.Deserialize(file, typeof(Maze)));
+                    inputFileName += Default.FILE_EXTENSION;
                 }
-                catch (IOException)
-                {
-                    Console.WriteLine(MenuText.IO_ERROR);
-                    switch (Prompt.Select(MenuText.SELECT_OPTION, new[]
-                    {
-                    MenuText.OPTION_TRY_AGAIN,
-                    MenuText.OPTION_RETURN
-                }))
-                    {
-                        case MenuText.OPTION_TRY_AGAIN:
-                            break;
-                        case MenuText.OPTION_RETURN:
-                            new Menu();
-                            break;
-                    }
-                } 
+                using StreamReader file = File.OpenText(@inputFileName);
+                JsonSerializer serializer = new JsonSerializer();
+                Console.WriteLine(MenuText.OPEN_SUCCESS, inputFileName);
+                Maze maze = (Maze)serializer.Deserialize(file, typeof(Maze));
+                file.Close();
+                Loaded(maze);
             }
+            catch (IOException)
+            {
+                Console.WriteLine(MenuText.IO_ERROR);
+                switch (Prompt.Select(MenuText.SELECT_OPTION, new[]
+                {
+                MenuText.OPTION_TRY_AGAIN,
+                MenuText.OPTION_RETURN
+            }))
+                {
+                    case MenuText.OPTION_TRY_AGAIN:
+                        Open();
+                        break;
+                    case MenuText.OPTION_RETURN:
+                        new Menu();
+                        break;
+                }
+            } 
         }
 
         /// <summary>
@@ -128,10 +128,11 @@ namespace ASCIIMazeGenerator
             {
                 inputFileName += Default.FILE_EXTENSION;
             }
-            using StreamWriter file = File.CreateText(inputFileName);
+            using StreamWriter file = File.CreateText(@inputFileName);
             JsonSerializer serializer = new JsonSerializer();
             serializer.Serialize(file, maze);
             Console.WriteLine(MenuText.SAVE_SUCCESS, inputFileName);
+            file.Close();
             new Menu();
         }
     }

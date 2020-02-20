@@ -46,7 +46,7 @@ namespace ASCIIMazeGenerator
         /// <param name="y">y Coordinate of the cell.</param>
         /// <param name="direction">Direction the cell is being visited from.</param>
         /// <param name="rand">Passes a random number generator through, to allow the use of a seed throughout the code without a global variable.</param>
-        void Generate(int x, int y, Cardinal cardinal, Random rand)
+        private void Generate(int x, int y, Cardinal cardinal, Random rand)
         {
             Cells[x][y].Visit(cardinal);
             cardinal = GetCardinal(rand, x, y);
@@ -78,7 +78,7 @@ namespace ASCIIMazeGenerator
         /// <param name="x">x Coordinate of the cell.</param>
         /// <param name="y">y Coordiante of the cell.</param>
         /// <returns>A list of Cardinal directions that can be visited from the cell of coordinates x and y.</returns>
-        Cardinal GetCardinal(Random rand, int x, int y)
+        private Cardinal GetCardinal(Random rand, int x, int y)
         {
             List<Cardinal> cardinals = new List<Cardinal>();
 
