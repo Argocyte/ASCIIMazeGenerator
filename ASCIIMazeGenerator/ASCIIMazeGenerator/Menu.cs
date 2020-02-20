@@ -17,28 +17,32 @@ namespace ASCIIMazeGenerator
         /// </summary>
         public Menu()
         {
-            Console.WriteLine();
-            switch (Prompt.Select(MenuText.SELECT_OPTION, new[] 
+            bool _continue = true;
+            while (_continue)
             {
-                MenuText.OPTION_GENERATE_DEFAULT,
-                MenuText.OPTION_GENERATE_CUSTOM,
-                MenuText.OPTION_OPEN_FROM_FILE,
-                MenuText.OPTION_EXIT_PROGRAM
-            }))
-            {
-                case MenuText.OPTION_GENERATE_DEFAULT:
-                    Generate(Default.MAZE_WIDTH, Default.MAZE_HEIGHT);
-                    break;
-                case MenuText.OPTION_GENERATE_CUSTOM:
-                    var inputWidth = Prompt.Input<int>(MenuText.INPUT_MAZE_WIDTH);
-                    var inputHeight = Prompt.Input<int>(MenuText.INPUT_MAZE_HEIGHT);
-                    Generate(inputWidth, inputHeight);
-                    break;
-                case MenuText.OPTION_OPEN_FROM_FILE:
-                    Open();
-                    break;
-                case MenuText.OPTION_EXIT_PROGRAM:
-                    break;
+                switch (Prompt.Select(MenuText.SELECT_OPTION,
+                    new[] {
+                        MenuText.OPTION_GENERATE_DEFAULT,
+                        MenuText.OPTION_GENERATE_CUSTOM,
+                        MenuText.OPTION_OPEN_FROM_FILE,
+                        MenuText.OPTION_EXIT_PROGRAM
+                    }))
+                {
+                    case MenuText.OPTION_GENERATE_DEFAULT:
+                        Generate(Default.MAZE_WIDTH,
+                            Default.MAZE_HEIGHT);
+                        break;
+                    case MenuText.OPTION_GENERATE_CUSTOM:
+                        Generate(Prompt.Input<int>(MenuText.INPUT_MAZE_WIDTH),
+                            Prompt.Input<int>(MenuText.INPUT_MAZE_HEIGHT));
+                        break;
+                    case MenuText.OPTION_OPEN_FROM_FILE:
+                        Open();
+                        break;
+                    case MenuText.OPTION_EXIT_PROGRAM:
+                        _continue = false;
+                        break;
+                }
             }
         }
 
@@ -60,14 +64,10 @@ namespace ASCIIMazeGenerator
         {
             try
             {
-                var inputFileName = Prompt.Input<string>(MenuText.OPEN_INPUT_FILE_NAME);
-                if (!inputFileName.Contains(Default.FILE_EXTENSION))
-                {
-                    inputFileName += Default.FILE_EXTENSION;
-                }
-                using StreamReader file = File.OpenText(@inputFileName);
+                var fileName = Prompt.Select(MenuText.SELECT_OPTION,
+                    Directory.GetFiles(Default.FILE_FOLDER_MZE, Default.WILDCARD + Default.FILE_EXTENSION_MZE));
+                using StreamReader file = File.OpenText(fileName);
                 JsonSerializer serializer = new JsonSerializer();
-                Console.WriteLine(MenuText.OPEN_SUCCESS, inputFileName);
                 Maze maze = (Maze)serializer.Deserialize(file, typeof(Maze));
                 file.Close();
                 Loaded(maze);
@@ -75,11 +75,12 @@ namespace ASCIIMazeGenerator
             catch (IOException)
             {
                 Console.WriteLine(MenuText.IO_ERROR);
-                switch (Prompt.Select(MenuText.SELECT_OPTION, new[]
-                {
-                MenuText.OPTION_TRY_AGAIN,
-                MenuText.OPTION_RETURN
-            }))
+                switch (Prompt.Select(MenuText.SELECT_OPTION,
+                    new[] {
+                        MenuText.OPTION_TRY_AGAIN,
+                        MenuText.OPTION_RETURN,
+                        MenuText.OPTION_EXIT_PROGRAM
+                    }))
                 {
                     case MenuText.OPTION_TRY_AGAIN:
                         Open();
@@ -87,8 +88,26 @@ namespace ASCIIMazeGenerator
                     case MenuText.OPTION_RETURN:
                         new Menu();
                         break;
+                    case MenuText.OPTION_EXIT_PROGRAM:
+                        break;
                 }
-            } 
+            }
+            catch (Exception)
+            {
+                Console.WriteLine(MenuText.OPEN_ERROR_NO_MAZES);
+                switch (Prompt.Select(MenuText.SELECT_OPTION,
+                    new[] {
+                        MenuText.OPTION_RETURN,
+                        MenuText.OPTION_EXIT_PROGRAM
+                    }))
+                {
+                    case MenuText.OPTION_RETURN:
+                        new Menu();
+                        break;
+                    case MenuText.OPTION_EXIT_PROGRAM:
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -97,22 +116,26 @@ namespace ASCIIMazeGenerator
         /// <param name="maze">A ready made maze</param>
         private void Loaded(Maze maze)
         {
-            Console.WriteLine(Environment.NewLine + maze.Display());
-            switch (Prompt.Select(MenuText.SELECT_OPTION, new[]
-            {
-                MenuText.OPTION_SAVE_TO_FILE,
-                MenuText.OPTION_GENERATE_NEW,
-                MenuText.OPTION_RETURN
-            }))
+            Console.WriteLine(Environment.NewLine + maze.Display() + Environment.NewLine);
+            switch (
+                Prompt.Select(MenuText.SELECT_OPTION,
+                new[] {
+                    MenuText.OPTION_SAVE_TO_FILE,
+                    MenuText.OPTION_OUTPUT_TO_TXT,
+                    MenuText.OPTION_GENERATE_NEW,
+                    MenuText.OPTION_RETURN
+                }))
             {
                 case MenuText.OPTION_SAVE_TO_FILE:
                     SaveToFile(maze);
+                    break;
+                case MenuText.OPTION_OUTPUT_TO_TXT:
+                    OutputToFile(maze);
                     break;
                 case MenuText.OPTION_GENERATE_NEW:
                     Generate(maze.Width, maze.Height);
                     break;
                 case MenuText.OPTION_RETURN:
-                    new Menu();
                     break;
             }
         }
@@ -124,16 +147,49 @@ namespace ASCIIMazeGenerator
         private void SaveToFile(Maze maze)
         {
             var inputFileName = Prompt.Input<string>(MenuText.SAVE_INPUT_FILE_NAME);
-            if (!inputFileName.Contains(Default.FILE_EXTENSION))
+            if (!inputFileName.Contains(Default.FILE_EXTENSION_MZE))//Add the .mze eztension if not present.
             {
-                inputFileName += Default.FILE_EXTENSION;
+                inputFileName += Default.FILE_EXTENSION_MZE;
             }
-            using StreamWriter file = File.CreateText(@inputFileName);
+            if (File.Exists(Default.FILE_FOLDER_MZE + inputFileName))//Checks if file already exists.
+            {
+                Console.WriteLine(MenuText.SAVE_FILE_EXISTS + Environment.NewLine, inputFileName);
+                if (!Prompt.Confirm(MenuText.CONFIRM_OVERWRITE))
+                {
+                    SaveToFile(maze);
+                    return;
+                }
+                File.Delete(Default.FILE_FOLDER_MZE + inputFileName);
+            }
+            using StreamWriter file = File.CreateText(Default.FILE_FOLDER_MZE + inputFileName);
             JsonSerializer serializer = new JsonSerializer();
             serializer.Serialize(file, maze);
-            Console.WriteLine(MenuText.SAVE_SUCCESS, inputFileName);
+            Console.WriteLine(MenuText.SAVE_SUCCESS + Environment.NewLine, inputFileName);
             file.Close();
-            new Menu();
+        }
+
+        private void OutputToFile(Maze maze)
+        {
+            var inputFileName = Prompt.Input<string>(MenuText.SAVE_INPUT_FILE_NAME);
+            if (!inputFileName.Contains(Default.FILE_EXTENSION_TXT))//Add the .mze eztension if not present.
+            {
+                inputFileName += Default.FILE_EXTENSION_TXT;
+            }
+            string fileNameLocation = Default.FILE_FOLDER_TXT + inputFileName;//puts the file in the default folder
+            if (File.Exists(fileNameLocation))//Checks if file already exists.
+            {
+                Console.WriteLine(MenuText.SAVE_FILE_EXISTS + Environment.NewLine, inputFileName);
+                if (!Prompt.Confirm(MenuText.CONFIRM_OVERWRITE))
+                {
+                    OutputToFile(maze);
+                    return;
+                }
+                File.Delete(Default.FILE_FOLDER_TXT + fileNameLocation);
+            }
+            using StreamWriter file = File.CreateText(fileNameLocation);
+            file.WriteLine(maze.Display());
+            Console.WriteLine(MenuText.SAVE_SUCCESS + Environment.NewLine, inputFileName);
+            file.Close();
         }
     }
 }
