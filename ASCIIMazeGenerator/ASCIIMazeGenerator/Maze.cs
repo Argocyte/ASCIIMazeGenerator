@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ASCIIMazeGenerator
 {
@@ -8,9 +9,11 @@ namespace ASCIIMazeGenerator
     public class Maze
     {
         /// <summary>
-        /// 2D array of the cells in the maze. Each cell has directions the four cardianl directions it can be connected to.
+        /// 2D array of the cells in the maze. Each cell has directions the four cardinal directions it can be connected to.
         /// </summary>
-        Cell[,] Cells;
+        public readonly Cell[,] Cells;
+        public readonly int Width;
+        public readonly int Height;
 
         /// <summary>
         /// Initialises A Maze of x by y size.
@@ -19,7 +22,9 @@ namespace ASCIIMazeGenerator
         /// <param name="height">The Height of the maze, in cell count.</param>
         public Maze(int width, int height)
         {
-            Cells = new Cell[width, height];
+            Width = width;
+            Height = height;
+            Cells = new Cell[Width, Height];
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -28,7 +33,7 @@ namespace ASCIIMazeGenerator
                 }
             }
             Random rand = new Random();
-            Generate(0, 0, 'N', rand);
+            Generate(0, 0, Cardinal.NORTH, rand);
         }
 
         /// <summary>
@@ -39,34 +44,34 @@ namespace ASCIIMazeGenerator
         /// <param name="y">y Coordinate of the cell.</param>
         /// <param name="direction">Direction the cell is being visited from.</param>
         /// <param name="rand">Passes a random number generator through, to allow the use of a seed throughout the code without a global variable.</param>
-        void Generate(int x, int y, char direction, Random rand)
+        void Generate(int x, int y, Cardinal cardinal, Random rand)
         {
-            Cells[x, y].VisitCell(direction);
-            string availableDirections = CheckDirection(x, y);
-            while (availableDirections != "")//will visit each direction not currently visited around the current cell.
+            Cells[x, y].VisitCell(cardinal);
+            cardinal = GetCardinal(rand, x, y);
+            while (cardinal != Cardinal.NONE)//will visit each direction not currently visited around the current cell.
             {
-                switch (availableDirections[rand.Next(availableDirections.Length)])//Picks a direction from the ones found.
+                switch (cardinal)
                 {
-                    case 'N':
-                        Generate(x, y - 1, 'S', rand);//Calls itself on the cell in the direction picked.
-                        Cells[x, y].VisitCell('N');//Sets the original cell to be connected to the one the code traveled to above.
+                    case Cardinal.NORTH:
+                        Generate(x, y - 1, Cardinal.SOUTH, rand);
+                        Cells[x, y].VisitCell(cardinal);
                         break;
-                    case 'S':
-                        Generate(x, y + 1, 'N', rand);
-                        Cells[x, y].VisitCell('S');
+                    case Cardinal.EAST:
+                        Generate(x + 1, y, Cardinal.WEST, rand);
+                        Cells[x, y].VisitCell(cardinal);
                         break;
-                    case 'E':
-                        Generate(x + 1, y, 'W', rand);
-                        Cells[x, y].VisitCell('E');
+                    case Cardinal.SOUTH:
+                        Generate(x, y + 1, Cardinal.NORTH, rand);
+                        Cells[x, y].VisitCell(cardinal);
                         break;
-                    case 'W':
-                        Generate(x - 1, y, 'E', rand);
-                        Cells[x, y].VisitCell('W');
+                    case Cardinal.WEST:
+                        Generate(x - 1, y, Cardinal.EAST, rand);
+                        Cells[x, y].VisitCell(cardinal);
                         break;
                     default:
                         break;
                 }
-                availableDirections = CheckDirection(x, y);//Esentially will remove the direction that was visited, and any that were visited before the program back-tracked.
+                cardinal = GetCardinal(rand, x, y);
             }
         }
 
@@ -76,27 +81,24 @@ namespace ASCIIMazeGenerator
         /// <param name="x">x Coordinate of the cell.</param>
         /// <param name="y">y Coordiante of the cell.</param>
         /// <returns>A list of Cardinal directions that can be visited from the cell of coordinates x and y.</returns>
-        string CheckDirection(int x, int y)
+        Cardinal GetCardinal(Random rand, int x, int y)
         {
-            string options = "";
+            List<Cardinal> cardinals = new List<Cardinal>();
 
-            if (x > 0 && !Cells[x - 1, y].Visited) //checks if not against West edge of the array, and the cell to the west has not been visited yet.
-            {
-                options += "W"; //adds west as an option
-            }
-            if (y > 0 && !Cells[x, y - 1].Visited) //same as above but for north
-            {
-                options += "N";
-            }
-            if (y < Cells.GetLength(1)-1 && !Cells[x, y + 1].Visited) //checks if not against the south edge of the array, and same as above.
-            {
-                options += "S";
-            }
-            if (x < Cells.GetLength(0)-1 && !Cells[x + 1, y].Visited)//same as above but for East
-            {
-                options += "E";
-            }
-            return options;
+            if (x > 0 && !Cells[x - 1, y].Visited())
+                cardinals.Add(Cardinal.WEST);
+            if (y > 0 && !Cells[x, y - 1].Visited())
+                cardinals.Add(Cardinal.NORTH);
+
+            if (y < Height - 1 && !Cells[x, y + 1].Visited())
+                cardinals.Add(Cardinal.SOUTH);
+            if (x < Width - 1 && !Cells[x + 1, y].Visited())
+                cardinals.Add(Cardinal.EAST);
+
+            if (cardinals.Count == 0)
+                cardinals.Add(Cardinal.NONE);
+
+            return cardinals[rand.Next(cardinals.Count)];
         }
 
         /// <summary>
@@ -106,13 +108,13 @@ namespace ASCIIMazeGenerator
         public string Display()
         {
             string output = "";
-            for (int y = 0; y < Cells.GetLength(1); y++)//loops through each cell from top left to bottom right, adding it's output to the string.
+            for (int y = 0; y < Height; y++)//loops through each cell from top left to bottom right, adding it's output to the string.
             {
-                for (int x = 0; x < Cells.GetLength(0); x++)
+                for (int x = 0; x < Width; x++)
                 {
                     output += Cells[x, y].OutputCell();
                 }
-                output += "\n";
+                output += Environment.NewLine;
             }
             return output;
         }

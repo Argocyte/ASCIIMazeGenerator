@@ -7,8 +7,28 @@
   "targets": {
     ".NETCoreApp,Version=v3.1": {
       "ASCIIMazeGenerator/1.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3",
+          "Sharprompt": "1.0.4"
+        },
         "runtime": {
           "ASCIIMazeGenerator.dll": {}
+        }
+      },
+      "Newtonsoft.Json/12.0.3": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.3.23909"
+          }
+        }
+      },
+      "Sharprompt/1.0.4": {
+        "runtime": {
+          "lib/netstandard2.0/Sharprompt.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
@@ -18,6 +38,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Newtonsoft.Json/12.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
+      "path": "newtonsoft.json/12.0.3",
+      "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
+    },
+    "Sharprompt/1.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-74xu6HualNcUmnpqZuoS7dr5ln5VbQHc4Nu+IJrhCa8JJ5uvWQWuS0SwMO5DTVlpjuWIrZYARfmOlv3XmWsamg==",
+      "path": "sharprompt/1.0.4",
+      "hashPath": "sharprompt.1.0.4.nupkg.sha512"
     }
   }
 }
