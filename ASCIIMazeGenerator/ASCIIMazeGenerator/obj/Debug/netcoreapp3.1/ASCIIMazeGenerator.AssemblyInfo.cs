@@ -11,11 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("ASCIIMazeGenerator")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Argocyte")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © 2020")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("ASCIIMazeGenerator")]
+[assembly: System.Reflection.AssemblyProductAttribute("ASCII Maze Generator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ASCIIMazeGenerator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 

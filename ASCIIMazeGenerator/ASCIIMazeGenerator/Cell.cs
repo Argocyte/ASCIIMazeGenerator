@@ -1,5 +1,22 @@
-﻿namespace ASCIIMazeGenerator
+﻿using System;
+
+namespace ASCIIMazeGenerator
 {
+    /// <summary>
+    /// North, South, East, and West.
+    /// </summary>
+    [Flags]
+    public enum Cardinal
+    {
+        NONE = 0,
+        EAST = 1 << 0,
+        NORTH = 1 << 1,
+        SOUTH = 1 << 2,
+        WEST = 1 << 3
+    }
+    /// <summary>
+    /// A cell of a maze, which contains a path.
+    /// </summary>
     public class Cell
     {
         /// <summary>
