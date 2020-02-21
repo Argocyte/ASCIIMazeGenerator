@@ -16,11 +16,6 @@ namespace ASCIIMazeGenerator
         public int Width;
         public int Height;
 
-        /// <summary>
-        /// Initialises A Maze of x by y size.
-        /// </summary>
-        /// <param name="width">The Width of the maze, in cell count.</param>
-        /// <param name="height">The Height of the maze, in cell count.</param>
         public Maze(int width, int height)
         {
             Width = width;
@@ -37,7 +32,23 @@ namespace ASCIIMazeGenerator
             Random rand = new Random();
             Generate(0, 0, Cardinal.NORTH, rand);
         }
-
+        /// <summary>
+        /// Asks each cell what it's output is, and adds it to a string.
+        /// </summary>
+        /// <returns>Returns a string of ASCII text which resembels the maze defined in the array of Cells. The output is formatted for new lines.</returns>
+        public string Display()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    stringBuilder.Append(Cells[x][y].Output());
+                }
+                if (y != Height - 1) stringBuilder.Append(Environment.NewLine);
+            }
+            return stringBuilder.ToString();
+        }
         /// <summary>
         /// Recursive function which visits a specified cell and goes to another cell adjacent until 
         /// all the cells around it are either connected to the cell, or visited by another path.
@@ -71,7 +82,6 @@ namespace ASCIIMazeGenerator
                 cardinal = GetCardinal(rand, x, y);
             }
         }
-
         /// <summary>
         /// Finds which of the four cardinal directions can be visited from the cell of coordinates x and y.
         /// </summary>
@@ -98,22 +108,12 @@ namespace ASCIIMazeGenerator
             return cardinals[rand.Next(cardinals.Count)];
         }
 
-        /// <summary>
-        /// Asks each cell what it's output is, and adds it to a string.
-        /// </summary>
-        /// <returns>Returns a string of ASCII text which resembels the maze defined in the array of Cells. The output is formatted for new lines.</returns>
-        public string Display()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    stringBuilder.Append(Cells[x][y].Output());
-                }
-                if (y != Height - 1) stringBuilder.Append(Environment.NewLine);
-            }
-            return stringBuilder.ToString();
-        }
+        //Serialisation should be handled internally...
+        //public string Serialise()
+        //{
+        //}
+        //private void DeSerialise()
+        //{
+        //}
     }
 }
