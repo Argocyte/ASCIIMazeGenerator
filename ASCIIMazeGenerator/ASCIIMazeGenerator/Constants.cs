@@ -26,7 +26,7 @@
     /// <summary>
     /// constants of all the manu text that is used/can be used.
     /// </summary>
-    internal static class MenuText
+    public static class MenuText
     {
         public const string BLANK = "";
         public const string SELECT_OPTION = "Select an option";
